@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fpx.dao.StudentMapper">
+
+    <!--查询操作-->
+    <select id="findAll" resultType="student">
+        select * from student
+    </select>
+
+    <!--根据id进行查询-->
+    <select id="findById" parameterType="int" resultType="student">
+        select * from student where id=#{id}
+    </select>
+
+    <!--sql语句抽取-->
+    <sql id="selectUser">select * from student</sql>
+
+    <select id="findByCondition" parameterType="student" resultType="student">
+        <include refid="selectUser"></include>
+        <where>
+            <if test="id!=0">
+                and id=#{id}
+            </if>
+            <if test="username!=null">
+                and username=#{username}
+            </if>
+            <if test="password!=null">
+                and password=#{password}
+            </if>
+        </where>
+    </select>
+
+    <select id="findByIds" parameterType="list" resultType="student">
+        <include refid="selectUser"></include>
+        <where>
+            <foreach collection="list" open="id in(" close=")" item="id" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </select>
+
+
+</mapper>
